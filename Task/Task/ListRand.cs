@@ -10,12 +10,12 @@ namespace Task
 
         public void Serialize(FileStream s)
         {
-            ListSerializationService.Serialize(s, this);
+            ListSerializerService.Serialize(s, this);
         }
         
         public void Deserialize(FileStream s)
         {
-            ListSerializationService.Deserialize(s);
+            ListSerializerService.Deserialize(s);
         } 
     }
 }

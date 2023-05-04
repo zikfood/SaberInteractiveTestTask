@@ -7,7 +7,7 @@ using System.Text.RegularExpressions;
 
 namespace Task
 {
-    public static class ListSerializationService
+    public static class ListSerializerService
     {
         private static readonly int FS_END = -1;
         private static readonly string DATA_FIELD = "Data";
@@ -32,9 +32,8 @@ namespace Task
                 data = Regex.Replace(data, "\"", "\\\"");
                 
                 sb.Append("{");
-                var y = node.Key.Data.ToCharArray();
                 sb.Append($"\"Data\":\"{data}\",");
-                sb.Append($"\"Rand\":{node.Value.ToString()}");
+                sb.Append($"\"Rand\":\"{node.Value.ToString()}\"");
                 sb.Append("},");
             }
             sb.Remove(sb.Length - 1, 1); // removing extra comma
@@ -57,8 +56,7 @@ namespace Task
             {
                 if (curByte == objectFirstByte)
                 {
-                    rawObjectData = ReadObject(s);
-                    nodesData.Add(SplitObjectData(rawObjectData));
+                    nodesData.Add(ReadObject(s));
                 }
             }
 
@@ -87,45 +85,46 @@ namespace Task
             return result;
         }
 
-        private static string ReadObject(FileStream s)
+        private static Dictionary<string, string> ReadObject(FileStream s)
         {
             StringBuilder sb = new StringBuilder();
             bool isReadingKeyOrValue = false;
+            bool isReadingKey = true;
+            Dictionary<string, string> objectParams = new Dictionary<string, string>();
+            string keyName = null;
             for (int curByte = s.ReadByte(); curByte != '}' || isReadingKeyOrValue; curByte = s.ReadByte())
             {
                 if (curByte == '"')
                 {
                     isReadingKeyOrValue = !isReadingKeyOrValue;
+                    if (!isReadingKeyOrValue)
+                    {
+                        if (!isReadingKey)
+                        {
+                            objectParams.Add(keyName, Regex.Unescape(sb.ToString()));
+                        }
+                        else
+                        {
+                            keyName = sb.ToString();
+
+                        }
+                        isReadingKey = !isReadingKey;
+                        sb.Clear();
+                    }
                     continue;
                 }
-                
-                sb.Append((char)curByte);
-                
-                if (curByte == '\\')
+
+                if (isReadingKeyOrValue)
                 {
-                    curByte = s.ReadByte();
-                    sb.Append((char) curByte);
+                    sb.Append((char)curByte);
+                
+                    if (curByte == '\\')
+                    {
+                        curByte = s.ReadByte();
+                        sb.Append((char) curByte);
+                    }
                 }
             }
-
-            return sb.ToString();
-        }
-
-        private static Dictionary<string, string> SplitObjectData(string data)
-        {
-            Dictionary<string, string> objectParams = new Dictionary<string, string>();
-            char[] separator =
-            {
-                ':', ','
-            };
-            string[] substrings = data.Split(separator,StringSplitOptions.None);
-            int numOfParams = substrings.Length;
-
-            for (int i = 0; i < numOfParams; i += 2)
-            {
-                objectParams.Add(substrings[i], Regex.Unescape(substrings[i + 1]));
-            }
-
             return objectParams;
         }
     }
