@@ -37,50 +37,50 @@
 ![Screenshot_1](https://user-images.githubusercontent.com/22577093/236282002-d714eafc-e6cf-4f28-86df-55a2eb132c14.png)
 
 Узлы
-Is enemy nearby
+#### Is enemy nearby
 Проверка на наличие врага по близости
 
 success - враг найден
 failure - враг не найден
 
-Shoot Enemy
+#### Shoot Enemy
 Стрельба по противнику
 
 running - производится стрельба по противнику
 
-Wait(1s) 
+#### Wait(1s) 
 Oжидание после выстрела
 
 running - задержка на 1 секунду
 
-Am I still waiting?
+#### Am I still waiting?
 Проверка на конец ожидания на патрульной точке
 
 success - прошло 5 минут ожидания
 failure - 5 минут еще не прошло
 
-Wait
+#### Wait
 Ожидание на точке патрулирования
 
 running - задержка на фрейм/1 секунду, продвижение таймера ожидания
 
-Walk forward 
+#### Walk forward 
 Продвижение к точке патрулирования
 
 running - передвижение к точке
 
-Am I on Spot?
+#### Am I on Spot?
 Проверка прибытия на точку
 
 success - персонаж на точке ожидания
 failure - персонаж еще в пути
 
-Change destination
+#### Change destination
 Меняет точку, к которой нужно идти
 
 running - точка меняется с А на Б или с Б на А
 
-Start waiting timer
+#### Start waiting timer
 Устанавливает таймер ожидания
 
 running - ставит таймер на 5 минут
