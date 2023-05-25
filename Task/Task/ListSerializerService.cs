@@ -67,7 +67,7 @@ namespace Task
                 
                 sb.Append("{");
                 sb.Append($"\"Data\":\"{data}\",");
-                sb.Append($"\"Rand\":\"{node.Value.ToString()}\"");
+                sb.Append($"\"Rand\":\"{nodeIndexes[node.Key.Rand]}\"");
                 sb.Append("},");
             }
             sb.Remove(sb.Length - 1, 1); // removing extra comma
