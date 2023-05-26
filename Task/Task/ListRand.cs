@@ -15,7 +15,7 @@ namespace Task
         
         public void Deserialize(FileStream s)
         {
-            ListSerializerService.Deserialize(s);
+            ListSerializerService.Deserialize(s, this);
         } 
     }
 }

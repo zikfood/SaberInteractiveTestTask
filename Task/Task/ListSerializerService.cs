@@ -58,6 +58,13 @@ namespace Task
         private static string WriteNodes(Dictionary<ListNode, int> nodeIndexes)
         {
             StringBuilder sb = new StringBuilder();
+            
+            if (nodeIndexes.Count == 0)
+            {
+                sb.Append("[]");
+                return sb.ToString();
+            }
+            
             sb.Append("[");
             foreach (var node in nodeIndexes)
             {
@@ -82,7 +89,7 @@ namespace Task
         /// <param name="s">File stream with serialized linked list</param>
         /// <param name="listRand">Linked list to serialize</param>
         /// <returns> deserialized ListRand</returns>
-        public static ListRand Deserialize(FileStream s)
+        public static void Deserialize(FileStream s, ListRand listRand)
         {
             char objectFirstByte = '{';
             ListNode[] nodeArr;
@@ -98,14 +105,17 @@ namespace Task
 
             nodeArr = CreateNodes(nodesData);
 
-            var result = new ListRand()
+            if (nodeArr.Length == 0)
             {
-                Count = nodesData.Count,
-                Head = nodeArr[0],
-                Tail = nodeArr[nodeArr.Length - 1]
-            };
-            
-            return result;
+                listRand.Count = 0;
+                listRand.Head = null;
+                listRand.Tail = null;
+                return;
+            }
+
+            listRand.Count = nodesData.Count;
+            listRand.Head = nodeArr[0];
+            listRand.Tail = nodeArr[nodeArr.Length - 1];
         }
 
         /// <summary>

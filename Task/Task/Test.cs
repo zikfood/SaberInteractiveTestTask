@@ -29,6 +29,8 @@ namespace Task
                 Head = head,
                 Tail = tail
             };
+
+            ListRand resultList = new ListRand();
             
             using (FileStream fs = new FileStream("test.json", FileMode.OpenOrCreate))
             {
@@ -37,7 +39,17 @@ namespace Task
 
             using (FileStream fs = new FileStream("test.json", FileMode.Open))
             {
-                listRand.Deserialize(fs);
+                resultList.Deserialize(fs);
+            }
+            
+            using (FileStream fs = new FileStream("test2.json", FileMode.OpenOrCreate))
+            {
+                new ListRand().Serialize(fs);
+            }
+
+            using (FileStream fs = new FileStream("test2.json", FileMode.Open))
+            {
+                resultList.Deserialize(fs);
             }
         }
     }
